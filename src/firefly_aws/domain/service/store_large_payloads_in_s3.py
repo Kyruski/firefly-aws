@@ -11,6 +11,11 @@ class StoreLargePayloadsInS3(ff.DomainService):
     _bucket: str = None
 
     def __call__(self, payload: str, name: str, context: str, type_: str, id_: str):
+        print('We have arguments: payload: ', type(payload), payload)
+        print('We have arguments: name: ', type(name), name)
+        print('We have arguments: context: ', type(context), context)
+        print('We have arguments: type_: ', type(type_), type_)
+        print('We have arguments: id_: ', type(id_), id_)
         if len(payload) > 64_000:
             key = f'tmp/{str(uuid.uuid1())}.json'
             self._s3_client.put_object(
