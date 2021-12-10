@@ -19,7 +19,10 @@ class DataApi(ff.LoggerAware):
                 db_name: str = None):
         params = params or []
         self.info('%s - %s', sql, str(params))
-
+        print('WE HAVE SQL', sql)
+        for p in params
+        print('WE HAVE PARAMs', p)
+        print('WE HAVE PARAMs', *p)
         return self._rds_data_client.execute_statement(
             resourceArn=(db_arn or self._db_arn),
             secretArn=(db_secret_arn or self._db_secret_arn),
