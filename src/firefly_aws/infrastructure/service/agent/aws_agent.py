@@ -920,6 +920,7 @@ class AwsAgent(ff.Agent, ResourceNameAware, ff.LoggerAware):
             self._create_stack(self._stack_name(), url)
 
     def _add_role(self, role_name: str, template):
+        print('PRINT BEFORE PERMISSIONS')
         print(self._aws_config.get('permissions', []))
         print(type(self._aws_config.get('permissions', [])))
         return template.add_resource(Role(
