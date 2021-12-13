@@ -938,6 +938,7 @@ class AwsAgent(ff.Agent, ResourceNameAware, ff.LoggerAware):
                                 'Action': [
                                     'athena:*',
                                     'cloudfront:CreateInvalidation',
+                                    'cognito-idp:*',
                                     'dynamodb:*',
                                     'ec2:*NetworkInterface',
                                     'ec2:DescribeNetworkInterfaces',
