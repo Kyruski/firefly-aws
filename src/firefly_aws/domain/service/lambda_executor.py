@@ -309,6 +309,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             'isBase64Encoded': False,
         }
         if cookies:
+            cookies = [self._make_cookie_from_dict(c) for c in cookies]
             ret['multiValueHeaders'] = {"Set-Cookie": cookies},
 
 
@@ -327,6 +328,33 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
 
         self.info(f'Proxy Response: %s', ret)
         return ret
+
+    def _make_cookie_from_dict(self, cookie: Union[str, dict]):
+        if isinstance(cookie, str):
+            return cookie
+        name = cookie['name']
+        value = cookie['value']
+        cookie_str = f'{name}={value}'
+        if cookie.get('max_age'):
+            max_age = cookie['max_age']
+            cookie_str += f'; Max-Age={max_age}'
+        if cookie.get('http_only'):
+            cookie_str += '; HttpOnly'
+        if cookie.get('expires'):
+            expires = cookie['expires']
+            cookie_str += f'; Expires={expires}'
+        if cookie.get('domain'):
+            domain = cookie['domain']
+            cookie_str += f'; Domain={domain}'
+        if cookie.get('path'):
+            path = cookie['path']
+            cookie_str += f'; Path={path}'
+        if cookie.get('samesite'):
+            samesite = cookie['samesite']
+            cookie_str += f'; SameSite={samesite}'
+        if cookie.get('secure'):
+            cookie_str += f'; Secure'
+        return cookie_str
 
     def _handle_async_event(self, event: dict):
         for record in event['Records']:
