@@ -299,6 +299,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
                 status_code = 303
                 headers['location'] = response.headers['location']
             body = self._serializer.serialize(response.unwrap())
+            cookies = response.get_cookies()
         else:
             body = self._serializer.serialize(response)
         headers.update(ACCESS_CONTROL_HEADERS)
