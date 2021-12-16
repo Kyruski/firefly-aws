@@ -344,7 +344,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
         if cookie.get('max_age'):
             max_age = cookie['max_age']
             cookie_str += f'; Max-Age={max_age}'
-        if cookie.get('http_only'):
+        if cookie.get('httponly'):
             cookie_str += '; HttpOnly'
         if cookie.get('expires'):
             expires = cookie['expires']
