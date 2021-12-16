@@ -299,7 +299,9 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
                 status_code = 303
                 headers['location'] = response.headers['location']
             body = self._serializer.serialize(response.unwrap())
+            print('cookies?')
             cookies = response.get_cookies()
+            print('cookies?', cookies)
         else:
             body = self._serializer.serialize(response)
         headers.update(ACCESS_CONTROL_HEADERS)
@@ -309,6 +311,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             'body': body,
             'isBase64Encoded': False,
         }
+        print('WE HAVE RESPPPPPPPPPPP', response.__dict__)
         if cookies:
             print('WE GOT THEM COOKIES')
             cookies = [self._make_cookie_from_dict(c) for c in cookies]
