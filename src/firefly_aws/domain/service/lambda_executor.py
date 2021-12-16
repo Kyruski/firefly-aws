@@ -299,9 +299,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
                 status_code = 303
                 headers['location'] = response.headers['location']
             body = self._serializer.serialize(response.unwrap())
-            print('cookies?')
             cookies = response.get_cookies()
-            print('cookies?', cookies)
         else:
             body = self._serializer.serialize(response)
         headers.update(ACCESS_CONTROL_HEADERS)
@@ -311,13 +309,10 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             'body': body,
             'isBase64Encoded': False,
         }
-        print('WE HAVE RESPPPPPPPPPPP', response.__dict__)
         if cookies:
-            print('WE GOT THEM COOKIES')
             cookies = [self._make_cookie_from_dict(c) for c in cookies]
             ret['multiValueHeaders'] = {"Set-Cookie": cookies},
 
-        print('WE GOT RET!@#$@%#$%!!!!!!!$@%!', ret)
         if len(body) > 6_000_000:
             download_url = self._s3_service.store_download(body, apply_compression=False)
             s3_download_domain = self._configuration.contexts[self._context].get('s3_download_domain')
@@ -331,7 +326,6 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             ret['statusCode'] = 303
             ret['headers']['Location'] = download_url
 
-        print('ANDNDNDNDNDNDNDNDND', ret)
         self.info(f'Proxy Response: %s', ret)
         return ret
 
