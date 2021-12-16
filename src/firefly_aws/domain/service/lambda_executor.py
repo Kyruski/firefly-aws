@@ -285,6 +285,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
 
     def _handle_http_response(self, response: any, status_code: int = 200, headers: dict = None):
         headers = headers or {}
+        cookies = None
         if isinstance(response, ff.Envelope):
             if response.get_range() is not None:
                 range_ = response.get_range()
@@ -307,6 +308,22 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             'body': body,
             'isBase64Encoded': False,
         }
+        if cookies:
+            set_cookies = []
+            for cookie in cookies:
+                name = cookie['name']
+                value = cookie['value']
+                cookie_str = f'{name}={value}'
+                if cookie.get('max_age'):
+                    max_age = cookie['max_age']
+                    cookie_str += f'; Max-Age={max_age}'
+                if cookie.get('http_only'):
+                    cookie_str += '; HttpOnly'
+                set_cookies.append(cookie_str)
+
+
+            ret['multiValueHeaders'] = {"Set-Cookie": set_cookies},
+
 
         if len(body) > 6_000_000:
             download_url = self._s3_service.store_download(body, apply_compression=False)
