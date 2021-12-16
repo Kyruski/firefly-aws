@@ -309,20 +309,7 @@ class LambdaExecutor(ff.DomainService, domain.ResourceNameAware):
             'isBase64Encoded': False,
         }
         if cookies:
-            set_cookies = []
-            for cookie in cookies:
-                name = cookie['name']
-                value = cookie['value']
-                cookie_str = f'{name}={value}'
-                if cookie.get('max_age'):
-                    max_age = cookie['max_age']
-                    cookie_str += f'; Max-Age={max_age}'
-                if cookie.get('http_only'):
-                    cookie_str += '; HttpOnly'
-                set_cookies.append(cookie_str)
-
-
-            ret['multiValueHeaders'] = {"Set-Cookie": set_cookies},
+            ret['multiValueHeaders'] = {"Set-Cookie": cookies},
 
 
         if len(body) > 6_000_000:
